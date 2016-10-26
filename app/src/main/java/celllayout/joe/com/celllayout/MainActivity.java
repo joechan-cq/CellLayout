@@ -9,7 +9,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
@@ -27,22 +26,22 @@ public class MainActivity extends AppCompatActivity {
         mAppWidgetHost.startListening();
 
         cellLayout = (CellLayout) findViewById(R.id.layout_cell_main);
-        for (int i = 0; i < 3; i++) {
-            ImageView imageView = new ImageView(this);
-            imageView.setImageResource(R.mipmap.ic_launcher);
-            imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-            CellLayout.Cell cell = new CellLayout.Cell(i + "", imageView);
-            cellLayout.addCell(cell);
-        }
-        for (int i = 0; i < 1; i++) {
-            ImageView imageView = new ImageView(this);
-            ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(300, 300);
-            imageView.setLayoutParams(params);
-            imageView.setImageResource(R.mipmap.ic_launcher);
-            imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-            CellLayout.Cell cell = new CellLayout.Cell(i + "", imageView);
-            cellLayout.addCell(cell);
-        }
+//        for (int i = 0; i < 3; i++) {
+//            ImageView imageView = new ImageView(this);
+//            imageView.setImageResource(R.mipmap.ic_launcher);
+//            imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+//            CellLayout.Cell cell = new CellLayout.Cell(i + "", imageView);
+//            cellLayout.addCell(cell);
+//        }
+//        for (int i = 0; i < 1; i++) {
+//            ImageView imageView = new ImageView(this);
+//            ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(300, 300);
+//            imageView.setLayoutParams(params);
+//            imageView.setImageResource(R.mipmap.ic_launcher);
+//            imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+//            CellLayout.Cell cell = new CellLayout.Cell(i + "", imageView);
+//            cellLayout.addCell(cell);
+//        }
         TextView textTv = new TextView(this);
         textTv.setText("hello world");
         textTv.setGravity(Gravity.CENTER);
@@ -120,6 +119,8 @@ public class MainActivity extends AppCompatActivity {
         AppWidgetProviderInfo appWidgetInfo = mAppWidgetManager.getAppWidgetInfo(appWidgetId);
 
         View hostView = mAppWidgetHost.createView(this, appWidgetId, appWidgetInfo);
+        ViewGroup.LayoutParams params=new ViewGroup.LayoutParams(appWidgetInfo.minWidth,appWidgetInfo.minHeight);
+        hostView.setLayoutParams(params);
         CellLayout.Cell cell = new CellLayout.Cell("Widget", hostView);
         cellLayout.addCell(cell);
     }
