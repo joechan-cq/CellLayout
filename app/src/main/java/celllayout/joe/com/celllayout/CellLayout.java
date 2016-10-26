@@ -15,8 +15,8 @@ import java.util.ArrayList;
  */
 public class CellLayout extends ViewGroup {
 
-    private int columns = 5;
-    private int rows = 5;
+    private int columns = 6;
+    private int rows = 4;
     private int per_cell_width;
     private int per_cell_height;
     private ArrayList<Cell> cells;
@@ -69,8 +69,8 @@ public class CellLayout extends ViewGroup {
         childHeightSpec = MeasureSpec.makeMeasureSpec(getMeasuredHeight(), MeasureSpec.AT_MOST);
         measureChild(child, childWidthSpec, childHeightSpec);
         //计算出cell要占据几格
-        childExpectCellWidthNum = (int) Math.ceil(child.getMeasuredWidth() / (per_cell_width * 1.0));
-        childExpectCellHeightNum = (int) Math.ceil(child.getMeasuredHeight() / (per_cell_height * 1.0));
+        childExpectCellWidthNum = (int) Math.ceil(child.getMeasuredWidth() / (per_cell_width * 1.0f));
+        childExpectCellHeightNum = (int) Math.ceil(child.getMeasuredHeight() / (per_cell_height * 1.0f));
         cell.setWidthNum(childExpectCellWidthNum);
         cell.setHeightNum(childExpectCellHeightNum);
     }
@@ -117,7 +117,7 @@ public class CellLayout extends ViewGroup {
                         break;
                     }
                     for (int l = i; l < i + cell.getHeightNum(); l++) {
-                        if (cellHolds[k][l]) {
+                        if (cellHolds[l][k]) {
                             isEnough = false;
                             break;
                         }
@@ -126,7 +126,7 @@ public class CellLayout extends ViewGroup {
                 if (isEnough) {
                     for (int k = j; k < j + cell.getWidthNum(); k++) {
                         for (int l = i; l < i + cell.getHeightNum(); l++) {
-                            cellHolds[k][l] = true;
+                            cellHolds[l][k] = true;
                         }
                     }
                     result.set(i, j);
