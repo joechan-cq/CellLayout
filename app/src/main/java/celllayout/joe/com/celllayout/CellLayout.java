@@ -183,9 +183,9 @@ public class CellLayout extends ViewGroup implements View.OnDragListener {
                     cell.setExpectColumnIndex(tempColumnIndex);
                     cell.setExpectRowIndex(tempRowIndex);
                     Log.d("CellLayout", "change Position:" + tempRowIndex + " " + tempColumnIndex);
-//                    postInvalidate();
                     requestLayout();
                 }
+                cell.getContentView().setVisibility(View.VISIBLE);
                 break;
             case DragEvent.ACTION_DRAG_ENDED:
                 Log.d("CellLayout", "onDrag: DRAG_ENDED");
@@ -208,6 +208,7 @@ public class CellLayout extends ViewGroup implements View.OnDragListener {
                 @Override
                 public boolean onLongClick(View v) {
                     DragShadowBuilder builder = new DragShadowBuilder(v);
+                    v.setVisibility(View.INVISIBLE);
                     v.startDrag(null, builder, Cell.this, 0);
                     return true;
                 }
