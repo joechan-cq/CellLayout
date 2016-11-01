@@ -1,6 +1,7 @@
 package celllayout.joe.com.celllayout;
 
 import android.appwidget.AppWidgetHost;
+import android.appwidget.AppWidgetHostView;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProviderInfo;
 import android.content.Intent;
@@ -118,8 +119,7 @@ public class MainActivity extends AppCompatActivity {
         Bundle extras = data.getExtras();
         int appWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, -1);
         AppWidgetProviderInfo appWidgetInfo = mAppWidgetManager.getAppWidgetInfo(appWidgetId);
-
-        View hostView = mAppWidgetHost.createView(this, appWidgetId, appWidgetInfo);
+        AppWidgetHostView hostView = mAppWidgetHost.createView(this, appWidgetId, appWidgetInfo);
         CellLayout.Cell cell = new CellLayout.Cell("Widget", hostView);
         cellLayout.addCell(cell);
     }

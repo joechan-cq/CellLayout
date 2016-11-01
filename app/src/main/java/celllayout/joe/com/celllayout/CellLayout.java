@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Point;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.DragEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -13,7 +14,7 @@ import java.util.ArrayList;
  * Description
  * Created by chenqiao on 2016/10/26.
  */
-public class CellLayout extends ViewGroup {
+public class CellLayout extends ViewGroup implements View.OnDragListener {
 
     private int columns = 6;
     private int rows = 4;
@@ -34,6 +35,8 @@ public class CellLayout extends ViewGroup {
         super(context, attrs, defStyleAttr);
         cells = new ArrayList<>();
         cellHolds = new boolean[rows][columns];
+
+        setOnDragListener(this);
     }
 
     public void addCell(Cell cell) {
@@ -42,9 +45,8 @@ public class CellLayout extends ViewGroup {
             //如果界面已经显示了，那么立刻进行一次位置计算
             initCell(cell);
             Point p = findLeftAndTop(cell);
-            cell.setExpectXIndex(p.x);
-            cell.setExpectYIndex(p.y);
-            postInvalidate();
+            cell.setExpectRowIndex(p.x);
+            cell.setExpectColumnIndex(p.y);
         }
     }
 
@@ -80,22 +82,22 @@ public class CellLayout extends ViewGroup {
         int nowL, nowT, locateX, locateY;
         int cellWidth, cellHeight;
         for (Cell cell : cells) {
-            if (cell.getExpectXIndex() >= 0 && cell.getExpectYIndex() >= 0) {
-                locateX = cell.getExpectXIndex();
-                locateY = cell.getExpectYIndex();
+            if (cell.getExpectColumnIndex() >= 0 && cell.getExpectRowIndex() >= 0) {
+                locateX = cell.getExpectColumnIndex();
+                locateY = cell.getExpectRowIndex();
             } else {
                 Point p = findLeftAndTop(cell);
-                cell.setExpectXIndex(p.x);
-                cell.setExpectYIndex(p.y);
-                locateX = p.x;
-                locateY = p.y;
+                cell.setExpectRowIndex(p.x);
+                cell.setExpectColumnIndex(p.y);
+                locateX = cell.getExpectColumnIndex();
+                locateY = cell.getExpectRowIndex();
                 if (p.x == -1 || p.y == -1) {
                     Log.e("CellLayout", "onLayout: child is to large or to much children");
                     continue;
                 }
             }
-            nowL = locateY * per_cell_width;
-            nowT = locateX * per_cell_height;
+            nowL = locateX * per_cell_width;
+            nowT = locateY * per_cell_height;
             cellWidth = cell.getWidthNum() * per_cell_width;
             cellHeight = cell.getHeightNum() * per_cell_height;
             //修改cell的layoutparam的大小，不然会导致cell的view中的gravity失效
@@ -109,27 +111,12 @@ public class CellLayout extends ViewGroup {
     private Point findLeftAndTop(Cell cell) {
         Point result = new Point(-1, -1);
         boolean isEnough;
-        for (int i = 0; i <= rows - cell.getHeightNum(); i++) {
-            for (int j = 0; j <= columns - cell.getWidthNum(); j++) {
-                isEnough = true;
-                for (int k = j; k < j + cell.getWidthNum(); k++) {
-                    if (!isEnough) {
-                        break;
-                    }
-                    for (int l = i; l < i + cell.getHeightNum(); l++) {
-                        if (cellHolds[l][k]) {
-                            isEnough = false;
-                            break;
-                        }
-                    }
-                }
+        for (int row = 0; row <= rows - cell.getHeightNum(); row++) {
+            for (int column = 0; column <= columns - cell.getWidthNum(); column++) {
+                isEnough = checkIsEnough(cellHolds, column, row, cell.getWidthNum(), cell.getHeightNum());
                 if (isEnough) {
-                    for (int k = j; k < j + cell.getWidthNum(); k++) {
-                        for (int l = i; l < i + cell.getHeightNum(); l++) {
-                            cellHolds[l][k] = true;
-                        }
-                    }
-                    result.set(i, j);
+                    fillCellLayout(column, row, cell.getWidthNum(), cell.getHeightNum());
+                    result.set(row, column);
                     return result;
                 }
             }
@@ -137,16 +124,94 @@ public class CellLayout extends ViewGroup {
         return result;
     }
 
+    //判断是否可以放置cell
+    private boolean checkIsEnough(boolean[][] myCellHolds, int startX, int startY, int width, int height) {
+        if (startX + width > columns || startY + height > rows) {
+            return false;
+        }
+        for (int i = startX; i < startX + width; i++) {
+            for (int j = startY; j < startY + height; j++) {
+                if (myCellHolds[j][i]) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private void fillCellLayout(int startX, int startY, int width, int height) {
+        if (startX + width > columns || startY + height > rows) {
+            return;
+        }
+        for (int i = startX; i < startX + width; i++) {
+            for (int j = startY; j < startY + height; j++) {
+                cellHolds[j][i] = true;
+            }
+        }
+    }
+
+    private boolean[][] tempCellHolds;
+
+    @Override
+    public boolean onDrag(View v, DragEvent event) {
+        Cell cell = (Cell) event.getLocalState();
+        switch (event.getAction()) {
+            case DragEvent.ACTION_DRAG_STARTED:
+                Log.d("CellLayout", "onDrag: DRAG_START");
+                tempCellHolds = cellHolds.clone();
+                for (int i = cell.getExpectColumnIndex(); i < cell.getExpectColumnIndex() + cell.getWidthNum(); i++) {
+                    for (int j = cell.getExpectRowIndex(); j < cell.getExpectRowIndex() + cell.getHeightNum(); j++) {
+                        tempCellHolds[j][i] = false;
+                    }
+                }
+                break;
+            case DragEvent.ACTION_DRAG_ENTERED:
+                Log.d("CellLayout", "onDrag: DRAG_ENTERED");
+                break;
+            case DragEvent.ACTION_DRAG_LOCATION:
+                Log.d("CellLayout", "onDrag: LOCATION");
+                break;
+            case DragEvent.ACTION_DRAG_EXITED:
+                Log.d("CellLayout", "onDrag: DRAG_EXITED");
+                break;
+            case DragEvent.ACTION_DROP:
+                Log.d("CellLayout", "onDrag: DROP=" + event.getX() + " " + event.getY());
+                int tempColumnIndex = (int) (event.getX() / per_cell_width);
+                int tempRowIndex = (int) (event.getY() / per_cell_height);
+                if (checkIsEnough(tempCellHolds, tempColumnIndex, tempRowIndex, cell.getWidthNum(), cell.getHeightNum())) {
+                    fillCellLayout(tempColumnIndex, tempRowIndex, cell.getWidthNum(), cell.getHeightNum());
+                    cell.setExpectColumnIndex(tempColumnIndex);
+                    cell.setExpectRowIndex(tempRowIndex);
+                    Log.d("CellLayout", "change Position:" + tempRowIndex + " " + tempColumnIndex);
+//                    postInvalidate();
+                    requestLayout();
+                }
+                break;
+            case DragEvent.ACTION_DRAG_ENDED:
+                Log.d("CellLayout", "onDrag: DRAG_ENDED");
+                break;
+        }
+        return true;
+    }
+
     public static class Cell {
         private String tag;
         private View contentView;
         private int widthNum;//横向占据的格数
         private int heightNum;//纵向占据的格数
-        private int expectXIndex = -1, expectYIndex = -1;//计算出的可摆放的位置
+        private int expectColumnIndex = -1, expectRowIndex = -1;//计算出的可摆放的位置
 
         public Cell(String tag, View view) {
             this.tag = tag;
             this.contentView = view;
+            this.contentView.setOnLongClickListener(new OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    DragShadowBuilder builder = new DragShadowBuilder(v);
+                    v.startDrag(null, builder, Cell.this, 0);
+                    return true;
+                }
+            });
         }
 
         public String getTag() {
@@ -181,20 +246,20 @@ public class CellLayout extends ViewGroup {
             return heightNum;
         }
 
-        public int getExpectXIndex() {
-            return expectXIndex;
+        public int getExpectColumnIndex() {
+            return expectColumnIndex;
         }
 
-        public void setExpectXIndex(int expectXIndex) {
-            this.expectXIndex = expectXIndex;
+        public void setExpectColumnIndex(int expectColumnIndex) {
+            this.expectColumnIndex = expectColumnIndex;
         }
 
-        public int getExpectYIndex() {
-            return expectYIndex;
+        public int getExpectRowIndex() {
+            return expectRowIndex;
         }
 
-        public void setExpectYIndex(int expectYIndex) {
-            this.expectYIndex = expectYIndex;
+        public void setExpectRowIndex(int expectRowIndex) {
+            this.expectRowIndex = expectRowIndex;
         }
     }
 }
