@@ -21,6 +21,7 @@ public class CellLayout extends ViewGroup implements View.OnDragListener {
     private int per_cell_width;
     private int per_cell_height;
     private ArrayList<Cell> cells;
+    private ArrayList<Cell> needRemoveCells;
     private boolean[][] cellHolds;
 
     public CellLayout(Context context) {
@@ -35,7 +36,7 @@ public class CellLayout extends ViewGroup implements View.OnDragListener {
         super(context, attrs, defStyleAttr);
         cells = new ArrayList<>();
         cellHolds = new boolean[rows][columns];
-
+        needRemoveCells = new ArrayList<>();
         setOnDragListener(this);
     }
 
@@ -81,6 +82,7 @@ public class CellLayout extends ViewGroup implements View.OnDragListener {
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         int nowL, nowT, locateX, locateY;
         int cellWidth, cellHeight;
+        needRemoveCells.clear();
         for (Cell cell : cells) {
             if (cell.getExpectColumnIndex() >= 0 && cell.getExpectRowIndex() >= 0) {
                 locateX = cell.getExpectColumnIndex();
@@ -93,6 +95,7 @@ public class CellLayout extends ViewGroup implements View.OnDragListener {
                 locateY = cell.getExpectRowIndex();
                 if (p.x == -1 || p.y == -1) {
                     Log.e("CellLayout", "onLayout: child is to large or to much children");
+                    needRemoveCells.add(cell);
                     continue;
                 }
             }
@@ -105,6 +108,19 @@ public class CellLayout extends ViewGroup implements View.OnDragListener {
             cell.getContentView().getLayoutParams().height = cellHeight;
             cell.getContentView().layout(nowL, nowT, nowL + cellWidth, nowT + cellHeight);
         }
+        for (Cell needRemoveCell : needRemoveCells) {
+            removeView(needRemoveCell.getContentView());
+        }
+        cells.removeAll(needRemoveCells);
+//        Log.d("CellLayout", "onLayout: ==============================");
+//        for (boolean[] cellHold : cellHolds) {
+//            StringBuilder builder = new StringBuilder();
+//            for (boolean b1 : cellHold) {
+//                builder.append(b1 + " ");
+//            }
+//            Log.d("CellLayout", "onLayout: " + builder.toString());
+//        }
+//        Log.d("CellLayout", "onLayout: ==============================");
     }
 
     //查找足够空间放置cell
@@ -179,10 +195,10 @@ public class CellLayout extends ViewGroup implements View.OnDragListener {
                 int tempColumnIndex = (int) (event.getX() / per_cell_width);
                 int tempRowIndex = (int) (event.getY() / per_cell_height);
                 if (checkIsEnough(tempCellHolds, tempColumnIndex, tempRowIndex, cell.getWidthNum(), cell.getHeightNum())) {
+                    cellHolds = tempCellHolds;
                     fillCellLayout(tempColumnIndex, tempRowIndex, cell.getWidthNum(), cell.getHeightNum());
                     cell.setExpectColumnIndex(tempColumnIndex);
                     cell.setExpectRowIndex(tempRowIndex);
-                    Log.d("CellLayout", "change Position:" + tempRowIndex + " " + tempColumnIndex);
                     requestLayout();
                 }
                 cell.getContentView().setVisibility(View.VISIBLE);
