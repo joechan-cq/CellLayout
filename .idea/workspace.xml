@@ -42,19 +42,21 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="MainActivity.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="MainActivity.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/celllayout/joe/com/celllayout/MainActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="377">
-              <caret line="122" column="48" selection-start-line="122" selection-start-column="48" selection-end-line="122" selection-end-column="48" />
+            <state relative-caret-position="157">
+              <caret line="113" column="6" selection-start-line="113" selection-start-column="6" selection-end-line="113" selection-end-column="6" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="e#2204#2357#0" expanded="true" />
+                <element signature="e#2356#2357#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="CellLayout.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="CellLayout.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/celllayout/joe/com/celllayout/CellLayout.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="199">
@@ -1439,7 +1441,7 @@
     </option>
     <option name="modificationStamps">
       <map>
-        <entry key="F:\Github\CellLayout" value="4432408260445" />
+        <entry key="F:\Github\CellLayout" value="4432895745515" />
       </map>
     </option>
     <option name="projectBuildClasspath">
@@ -1769,8 +1771,8 @@
       <list>
         <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml" />
         <option value="$PROJECT_DIR$/app/build.gradle" />
-        <option value="$PROJECT_DIR$/app/src/main/java/celllayout/joe/com/celllayout/MainActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/celllayout/joe/com/celllayout/CellLayout.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/celllayout/joe/com/celllayout/MainActivity.java" />
       </list>
     </option>
   </component>
@@ -2173,6 +2175,8 @@
           <caret line="45" column="9" selection-start-line="45" selection-start-column="9" selection-end-line="45" selection-end-column="9" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#2204#2357#0" expanded="true" />
+            <element signature="e#2356#2357#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -2206,6 +2210,8 @@
           <caret line="117" column="52" selection-start-line="117" selection-start-column="52" selection-end-line="117" selection-end-column="52" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#2204#2357#0" expanded="true" />
+            <element signature="e#2356#2357#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -2247,6 +2253,8 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#2204#2357#0" expanded="true" />
+            <element signature="e#2356#2357#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -2338,16 +2346,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/celllayout/joe/com/celllayout/MainActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="377">
-          <caret line="122" column="48" selection-start-line="122" selection-start-column="48" selection-end-line="122" selection-end-column="48" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/celllayout/joe/com/celllayout/CellLayout.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="199">
@@ -2359,6 +2357,18 @@
             <element signature="e#8756#8757#0" expanded="true" />
             <element signature="e#8991#8992#0" expanded="true" />
             <element signature="e#9031#9032#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/celllayout/joe/com/celllayout/MainActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="157">
+          <caret line="113" column="6" selection-start-line="113" selection-start-column="6" selection-end-line="113" selection-end-column="6" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#2204#2357#0" expanded="true" />
+            <element signature="e#2356#2357#0" expanded="true" />
           </folding>
         </state>
       </provider>

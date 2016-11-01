@@ -119,8 +119,7 @@ public class MainActivity extends AppCompatActivity {
         int appWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, -1);
         AppWidgetProviderInfo appWidgetInfo = mAppWidgetManager.getAppWidgetInfo(appWidgetId);
         AppWidgetHostView hostView = mAppWidgetHost.createView(this, appWidgetId, appWidgetInfo);
-        View hostView = mAppWidgetHost.createView(this, appWidgetId, appWidgetInfo);
-        ViewGroup.LayoutParams params=new ViewGroup.LayoutParams(appWidgetInfo.minWidth,appWidgetInfo.minHeight);
+        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(appWidgetInfo.minWidth, appWidgetInfo.minHeight);
         hostView.setLayoutParams(params);
         CellLayout.Cell cell = new CellLayout.Cell("Widget", hostView);
         cellLayout.addCell(cell);
